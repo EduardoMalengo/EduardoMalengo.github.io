@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Cadastro</h2>
+            <form id="register-form">
+                <input type="text" id="username" placeholder="Usuário" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit">Cadastrar</button>
+                <p>Já tem uma conta? <a href="login.html">Faça login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para salvar dados de registro
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Obtendo os dados dos inputs
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Verifica se já existe um cadastro com o mesmo email
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                alert("Já existe uma conta com esse email.");
+                return;
+            }
+
+            // Salvando as informações no localStorage
+            users.push({ username, email, password });
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // Após o cadastro, redireciona para o login
+            alert("Cadastro realizado com sucesso!");
+            window.location.href = "login.html";
+        });
+    </script>
+</body>
+</html>

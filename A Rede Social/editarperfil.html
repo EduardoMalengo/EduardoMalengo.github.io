@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="profile-box">
+            <h2>Perfil do Usuário</h2>
+            <form id="profile-form">
+                <label for="username">Nome de Usuário:</label>
+                <input type="text" id="username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="password">Senha:</label>
+                <input type="password" id="password" required>
+
+                <label for="profile-pic">Foto de Perfil:</label>
+                <input type="file" id="profile-pic" accept="image/*">
+                
+                <button type="submit">Salvar Alterações</button>
+            </form>
+            <button onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProfile();
+        });
+
+        function loadProfile() {
+            const username = localStorage.getItem("username");
+            const email = localStorage.getItem("email");
+            const password = localStorage.getItem("password");
+            const profilePic = localStorage.getItem("profilePic");
+
+            if (username && email && password) {
+                document.getElementById("username").value = username;
+                document.getElementById("email").value = email;
+                document.getElementById("password").value = password;
+                if (profilePic) {
+                    const img = document.createElement('img');
+                    img.src = profilePic;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    document.getElementById("profile-pic").parentNode.insertBefore(img, document.getElementById("profile-pic"));
+                }
+            } else {
+                alert("Você não está logado!");
+                window.location.href = "login.html"; 
+            }
+        }
+
+        document.getElementById("profile-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const profilePic = document.getElementById("profile-pic").files[0];
+
+            if (profilePic) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    localStorage.setItem("profilePic", reader.result);
+                }
+                reader.readAsDataURL(profilePic);
+            }
+
+            localStorage.setItem("username", username);
+            localStorage.setItem("email", email);
+            localStorage.setItem("password", password);
+
+            alert("Alterações salvas com sucesso!");
+
+            // Redirecionando para a página do Chat após salvar as alterações
+            window.location.href = "chat.html"; // Substitua com o nome da sua página de chat
+        });
+
+        function logout() {
+            localStorage.removeItem("username");
+            localStorage.removeItem("email");
+            localStorage.removeItem("password");
+            localStorage.removeItem("profilePic");
+            alert("Você saiu da sua conta!");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

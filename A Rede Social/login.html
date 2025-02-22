@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-box" id="login-box">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="text" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Senha" required>
+                <button type="submit">Entrar!</button>
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #FF6F61;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #FF4C40;
+}
+
+a {
+    text-decoration: none;
+    color: #FF6F61;
+    font-weight: bold;
+}
+
+p {
+    margin-top: 20px;
+}
+    </style>
+
+<script>
+    // Função para verificar o login
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Impede o comportamento padrão do formulário
+
+        // Obtendo os dados de login
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        // Verificando se o email e senha correspondem a um usuário registrado
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const user = users.find(user => user.email === email && user.password === password);
+
+        if (user) {
+            alert("Login bem-sucedido!");
+            // Salvando informações do usuário no localStorage para carregar no perfil
+            localStorage.setItem("username", user.username);
+            localStorage.setItem("email", user.email);
+            localStorage.setItem("password", user.password);
+            
+            // Redireciona para a página de perfil
+            window.location.href = "editarperfil.html"; 
+        } else {
+            alert("Email ou senha inválidos.");
+        }
+    });
+</script>
+</body>
+</html>

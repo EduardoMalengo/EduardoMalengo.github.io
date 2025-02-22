@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            background-image: url('https://media.giphy.com/media/3o6gE5aYgM0XlT21X6/giphy.gif');
+            background-size: cover;
+            animation: backgroundAnimation 5s infinite alternate;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            color: black;
+            animation: chatAnimation 3s ease-in-out;
+        }
+
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input, button {
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        img, video, audio {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        @keyframes backgroundAnimation {
+            0% {
+                background-image: url('https://media.giphy.com/media/3o6gE5aYgM0XlT21X6/giphy.gif');
+            }
+            100% {
+                background-image: url('https://media.giphy.com/media/8lq0Z6DbdgDTy3CAlf/giphy.gif');
+            }
+        }
+
+        @keyframes chatAnimation {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Chat</h2>
+        <div class="messages" id="messages"></div>
+        <input type="text" id="messageInput" placeholder="Digite sua mensagem">
+        <button onclick="sendMessage()">Enviar</button>
+        <button onclick="startCall()">Ligar</button>
+        <button onclick="startVideoCall()">Chamada de Vídeo</button>
+        <input type="file" id="mediaInput" accept="image/*,video/*,audio/*">
+        <button onclick="sendMedia()">Enviar Mídia</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            loadMessages();
+        });
+
+        function sendMessage() {
+            let input = document.getElementById('messageInput');
+            let message = input.value.trim();
+            if (message) {
+                let messageContainer = document.getElementById('messages');
+                let newMessage = document.createElement('div');
+                newMessage.textContent = message;
+                newMessage.style.background = "#d1e7ff";
+                newMessage.style.padding = "10px";
+                newMessage.style.borderRadius = "5px";
+                newMessage.style.margin = "5px 0";
+                messageContainer.appendChild(newMessage);
+                saveMessage(message);
+                input.value = '';
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+        }
+
+        function saveMessage(message) {
+            let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            messages.push(message);
+            localStorage.setItem("chatMessages", JSON.stringify(messages));
+        }
+
+        function loadMessages() {
+            let messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            let messageContainer = document.getElementById('messages');
+            messages.forEach(msg => {
+                let newMessage = document.createElement('div');
+                newMessage.textContent = msg;
+                newMessage.style.background = "#d1e7ff";
+                newMessage.style.padding = "10px";
+                newMessage.style.borderRadius = "5px";
+                newMessage.style.margin = "5px 0";
+                messageContainer.appendChild(newMessage);
+            });
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        function startCall() {
+            alert("Ligação iniciada!");
+        }
+
+        function startVideoCall() {
+            alert("Chamada de vídeo iniciada!");
+        }
+
+        function sendMedia() {
+            let mediaInput = document.getElementById('mediaInput');
+            let file = mediaInput.files[0];
+            if (file) {
+                let messageContainer = document.getElementById('messages');
+                let mediaElement;
+                
+                if (file.type.startsWith('image/')) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = URL.createObjectURL(file);
+                } else if (file.type.startsWith('video/')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = URL.createObjectURL(file);
+                    mediaElement.controls = true;
+                } else if (file.type.startsWith('audio/')) {
+                    mediaElement = document.createElement('audio');
+                    mediaElement.src = URL.createObjectURL(file);
+                    mediaElement.controls = true;
+                }
+                
+                if (mediaElement) {
+                    mediaElement.style.maxWidth = '100%';
+                    mediaElement.style.borderRadius = '5px';
+                    mediaElement.style.marginTop = '5px';
+                    messageContainer.appendChild(mediaElement);
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                }
+            }
+        }
+    </script>
+
+    <button> <a href="paginainicial.html"></a>Voltar</button>
+</body>
+</html>

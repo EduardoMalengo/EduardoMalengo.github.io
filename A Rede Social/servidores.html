@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha de Servidor</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2rem;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+        button {
+            background-color: #FF6F61;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #FF4C40;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Escolha um Servidor</h2>
+        <select id="serverSelect">
+            <option value="norte">Norte</option>
+            <option value="nordeste">Nordeste</option>
+            <option value="centro-oeste">Centro-Oeste</option>
+            <option value="sudeste">Sudeste</option>
+            <option value="sul">Sul</option>
+        </select>
+        <button onclick="saveServer()">Entrar</button>
+        <button><a href="perfil.html">Voltar</a></button>
+    </div>
+
+    <script>
+        // Função para medir o ping de um servidor
+        function checkPing(serverUrl) {
+            const startTime = new Date().getTime();
+
+            fetch(serverUrl)
+                .then(() => {
+                    const endTime = new Date().getTime();
+                    const ping = endTime - startTime;
+                    console.log(`Ping para ${serverUrl}: ${ping}ms`);
+                    return ping;
+                })
+                .catch(() => {
+                    console.log(`Falha ao conectar ao servidor ${serverUrl}`);
+                });
+        }
+
+        // Função para salvar o servidor escolhido
+        function saveServer() {
+            const selectedServer = document.getElementById('serverSelect').value;
+            localStorage.setItem('selectedServer', selectedServer);
+
+            // Simulando o ping para o servidor selecionado
+            const serverUrl = getServerUrl(selectedServer);
+            checkPing(serverUrl);
+
+            // Redirecionar para a página de perfil
+            window.location.href = "perfil.html";
+        }
+
+        // Obter o URL do servidor de acordo com a escolha
+        function getServerUrl(server) {
+            const servers = {
+                norte: 'https://norte.example.com',
+                nordeste: 'https://nordeste.example.com',
+                'centro-oeste': 'https://centrooeste.example.com',
+                sudeste: 'https://sudeste.example.com',
+                sul: 'https://sul.example.com',
+            };
+            return servers[server] || '';
+        }
+    </script>
+</body>
+</html>
